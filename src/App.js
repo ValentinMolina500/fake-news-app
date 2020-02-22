@@ -20,10 +20,12 @@ function HomePage() {
   return (
     <div id="Page">
       <div id="Float">
-        <div>Fake News Detection</div>
-        <div>
+        <div id="Float-Title">Fake News Detection</div>
+        <div id="Float-Query">
           <input name="Query"></input>
-          <input type="Submit"></input>
+        </div>
+        <div id="Float-Query">
+          <input type="Submit" value="Search"></input>
         </div>
       </div>
     </div>
