@@ -6,29 +6,33 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/Home" component={ResultsPage} />
-          </Switch>
-        </BrowserRouter>
-      </header>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/Home" component={ResultsPage} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
 
 function HomePage() {
   return (
-    <div>
-      Hello World!
+    <div id="Page">
+      <div id="Float">
+        <div>Fake News Detection</div>
+        <div>
+          <input name="Query"></input>
+          <input type="Submit"></input>
+        </div>
+      </div>
     </div>
   );
 }
 
 function ResultsPage() {
   return (
-    <div>
+    <div id="Page">
       Hello World! 123
     </div>
   );
