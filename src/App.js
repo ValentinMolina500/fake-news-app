@@ -7,8 +7,22 @@ import {
   withRouter
 } from 'react-router-dom';
 import SummaryPage from "./SummaryPage/SummaryPage";
+import Input from './utils/claim';
 
 class AppComponent extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      claim: '',
+    }
+  }
+
+  handleInput = e => {
+    this.setState({
+      claim: e.target.value
+    })
+  }
 
   render() {
     return (
@@ -18,8 +32,14 @@ class AppComponent extends React.Component {
         </div>
         <div id="second-section">
           <div>
-            <input id="main-input" placeholder="Enter your claim"></input>
-            <button id="submit-button" onClick={() =>  console.log(this.props.history.push('/summary'))}>Tell me the truth</button>
+            <input id="main-input" value={this.state.claim} onChange={this.handleInput} placeholder="Enter your claim"></input>
+            <button id="submit-button" onClick={() =>  {
+              Input.setClaim(this.state.claim)
+              let q = this.state.claim.trim();
+             
+                this.props.history.push('/summary')
+      
+              }}>Tell me the truth</button>
           </div>
   
         </div>
