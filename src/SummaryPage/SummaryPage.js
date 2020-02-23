@@ -9,16 +9,71 @@ class SummaryPage extends React.Component {
     super(props);
 
     this.state = {
-      articles: []
+      articles: [],
+      sentiments: [],
+      result: ''
     }
   }
 
   componentDidMount() {
+    let val;
     let q = Input.getClaim().trim();
     if (q) {
       fetch("https://newsapi.org/v2/everything?q=" + q + "&apiKey=b0fa5063d2a4494db80d88f2d3dcfe38", {mode: 'cors'})
       .then((res) => res.json())
-      .then(val => this.setState({ articles: val.articles }))
+      .then(vals => {
+        val = vals
+        // let sentiments = [];
+        let docs = {
+          "documents": []
+        }
+        if (val.articles && val.articles.length != 0) {
+          for (let i = 0; i < val.articles.length; i++) {
+          docs["documents"].push({
+            "language": "en",
+            "id": i,
+            "text": val.articles[i].description
+          })
+
+
+          }
+
+
+          // fetch('https://crimsoncode2020.cognitiveservices.azure.com/text/analytics/v2.1/sentiment', docs)
+          fetch('https://crimsoncode2020.cognitiveservices.azure.com/text/analytics/v2.1/sentiment', {
+            method: 'post',
+            
+            headers: new Headers({
+              'Ocp-Apim-Subscription-Key' : 'f15f20ca2f114ff6938d75e6a47528c6',
+              'Content-Type': 'text/json'
+            }),
+            body: JSON.stringify(docs)
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              let agree = 0;
+              let disagree = 0;
+              for (let i = 0; i < res.documents.length; i++) {
+                if (res.documents[i].score > 0.5) {
+                  agree++
+                } else {
+                  disagree++;
+              }
+              let result = '';
+              if (agree > disagree) {
+                result = "TRUE"
+              } else {
+                result = "FALSE"
+              }
+              let obj = { articles: val.articles, sentiments: res, result: result}
+
+              this.setState(obj)
+            }
+            })
+            // .then((res) => console.log(res))
+        }
+      })
+      // .then(val => this.setState({ articles: val.articles }))
       .catch(() => console.log('error'))
     }
   
@@ -29,15 +84,15 @@ class SummaryPage extends React.Component {
       return;
     }
 
-    console.log('here!')
-    return this.state.articles.map((val) => {
-      console.log(val)
+
+    return this.state.articles.map((val, index) => {
       let r = this.getRndInteger(0, 2)
       return (
         <tr>
           <td>{val.source.name}</td>
           <td><a href={val.url} target="_blank">{val.title}</a></td>
-          <td>{r ? 'Agree' : 'Disagree'}</td>
+          {/* <td>{r ? 'Agree' : 'Disagree'}</td> */}
+          <td>{this.state.sentiments.documents[index].score > 0.5 ? 'Agree' : 'Disagree'}</td>
         </tr>
       )
     })
@@ -49,7 +104,7 @@ class SummaryPage extends React.Component {
     let random = this.getRndInteger(0, 2);
     return (
       <div id="summary-page">
-        <img id="paperboy" src={random ? paperboy : paperboy_F} />
+        <img id="paperboy" src={this.state.result == "TRUE" ? paperboy : paperboy_F} />
         <div id="heading-wrapper">
   
         
@@ -61,8 +116,8 @@ class SummaryPage extends React.Component {
             </div>
           </div>
           <div id="summary-second-section">
-            <div className={["center", random ? 'real' : 'fake'].join(" ")}>
-              <h1 id="result">{random ? 'True' : 'False'}</h1>
+            <div className={["center", this.state.result == "TRUE" ? 'real' : 'fake'].join(" ")}>
+              <h1 id="result">{this.state.result}</h1>
 
             </div>
           </div>

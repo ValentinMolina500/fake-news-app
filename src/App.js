@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import SummaryPage from "./SummaryPage/SummaryPage";
 import Input from './utils/claim';
+import google from './google';
 
 class AppComponent extends React.Component {
 
@@ -36,10 +37,13 @@ class AppComponent extends React.Component {
             <button id="submit-button" onClick={() =>  {
               Input.setClaim(this.state.claim)
               let q = this.state.claim.trim();
-             
+            
                 this.props.history.push('/summary')
       
               }}>Tell me the truth</button>
+            <button id="submit-button" onClick={() =>  {
+              google();
+              }}>test</button>
           </div>
   
         </div>
