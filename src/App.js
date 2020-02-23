@@ -18,7 +18,7 @@ class AppComponent extends React.Component {
         </div>
         <div id="second-section">
           <div>
-            <input id="main-input"></input>
+            <input id="main-input" placeholder="Enter your claim"></input>
             <button id="submit-button" onClick={() =>  console.log(this.props.history.push('/summary'))}>Tell me the truth</button>
           </div>
   
