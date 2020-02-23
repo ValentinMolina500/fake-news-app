@@ -16,7 +16,7 @@ class SummaryPage extends React.Component {
   componentDidMount() {
     let q = Input.getClaim().trim();
     if (q) {
-      fetch("http://newsapi.org/v2/everything?q=" + q + "&apiKey=b0fa5063d2a4494db80d88f2d3dcfe38", {mode: 'cors'})
+      fetch("https://newsapi.org/v2/everything?q=" + q + "&apiKey=b0fa5063d2a4494db80d88f2d3dcfe38", {mode: 'cors'})
       .then((res) => res.json())
       .then(val => this.setState({ articles: val.articles }))
       .catch(() => console.log('error'))
